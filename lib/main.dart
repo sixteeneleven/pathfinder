@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'maze.dart';
-import 'node.dart';
+import 'pathfinder.dart';
+import 'dart:developer';
 
 void main() => runApp(RootOfMyApp());
 
@@ -28,46 +28,56 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  // List/array of a list of nodes
-  List<List<Node>> maze;
 
   @override
   void initState() {
+    var boolMaze = [
+      //y0
+      [true, true, true, true, true], //x5
+      //y1
+      [true, false, false, false, true],
+      //y2
+      [true, true, true, true, true],
+      //y3
+      [true, true, true, true, true],
+      //y4
+      [true, true, true, true, true],
+    ];
 
-    maze = Maze().generateMaze(3, 3);
-    for (int i = 0; i < maze.length; i++) {
-      for (int j = 0; j < maze[i].length; j++) {
-        print(i.toString() +
-            "-" +
-            j.toString() +
-            ": " +
-            maze[i][j].getNodeValue().toString());
+    print('maze');
+    //for each row depth level  (y0-y^n)
+    for (int y = 0; y < boolMaze.length; y++) {
+      //for each node until end of that row (x0-x^n)
+      String row = '';
+
+      for (int x = 0; x < boolMaze[y].length; x++) {
+        //if the node at that depth in the maze is true
+        if (boolMaze[y][x]) {
+          //print x(n)-y(n) true
+          //print("x" + node.toString() + "-" + "y" + depth.toString() + " true");
+          row = row + ". ";
+        } else {
+          //else print x(n)-y(n) false
+          //print("x" + node.toString() + "-" + "y" + depth.toString() + " false");
+          row = row + "# ";
+        }
       }
+      print(row);
     }
+
+    log('result: ' + pathfinder(boolMaze).toString());
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            //debug
-            FlatButton(
-              child: Text("?"),
-              onPressed: () {
-                print(maze[2][2].getNodeValue());
-              },
-            ),
-
-          ],
+        appBar: AppBar(
+          title: Text(widget.title),
         ),
-      ),
-    );
+        body: Column(
+          children: <Widget>[],
+        ));
   }
 }
