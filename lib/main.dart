@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pathfinder/visualiser.dart';
 import 'pathfinder.dart';
 import 'dart:developer';
 
@@ -44,27 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
       [true, true, true, true, true],
     ];
 
-    print('maze');
-    //for each row depth level  (y0-y^n)
-    for (int y = 0; y < boolMaze.length; y++) {
-      //for each node until end of that row (x0-x^n)
-      String row = '';
-
-      for (int x = 0; x < boolMaze[y].length; x++) {
-        //if the node at that depth in the maze is true
-        if (boolMaze[y][x]) {
-          //print x(n)-y(n) true
-          //print("x" + node.toString() + "-" + "y" + depth.toString() + " true");
-          row = row + ". ";
-        } else {
-          //else print x(n)-y(n) false
-          //print("x" + node.toString() + "-" + "y" + depth.toString() + " false");
-          row = row + "# ";
-        }
-      }
-      print(row);
-    }
-
+    visualise(boolMaze);
     log('result: ' + pathfinder(boolMaze).toString());
 
     super.initState();
