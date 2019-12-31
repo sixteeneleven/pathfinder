@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pathfinder/node_grid.dart';
-import 'package:pathfinder/visualiser.dart';
-import 'pathfinder.dart';
-import 'dart:developer';
+import 'package:pathfinder/ui/node_grid.dart';
 
 void main() => runApp(RootOfMyApp());
 
@@ -31,6 +28,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   List<List<bool>> maze;
+
   void initState() {
     maze = [
       //y0
@@ -53,10 +51,15 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        body: SafeArea(child: NodeGrid(maze: maze, startpointP: [1,0], endpointQ: [2,4],)),
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: SafeArea(
+          child: NodeGrid(
+        maze: maze,
+        startpointP: [1, 0],
+        endpointQ: [2, 4],
+      )),
     );
   }
 }

@@ -22,7 +22,6 @@ int solve(List<List<bool>> maze, List<int> startpointP, List<int> endpointQ) {
   queue.add([startpointP[0], startpointP[1], 0]);
   // for each node in the queue
   for (int qIndex = 0; qIndex < queue.length; qIndex++) {
-
     if (queue[qIndex][0] == endpointQ[0] && queue[qIndex][1] == endpointQ[1]) {
       print(queue[qIndex].toString() +
           ' matches objective ' +
