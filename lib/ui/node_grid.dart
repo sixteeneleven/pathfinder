@@ -2,7 +2,7 @@ import 'dart:async';
 import 'grid_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:pathfinder/ui/node_button.dart';
-import '../pathfinder/pathfinder.dart';
+import '../pathfinder/future_stream_pathfinder.dart';
 
 //widget that produces a visual representation of maze to solve, and shows how
 //the sorting algorithm processes the maze. includes a RaisedButton to start the

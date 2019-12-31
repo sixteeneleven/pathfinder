@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:pathfinder/pathfinder/og_pathfinder.dart';
+import 'package:pathfinder/pathfinder/int_pathfinder.dart';
 
 void main() {
   test('six steps', () {
