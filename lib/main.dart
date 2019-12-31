@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pathfinder/node_grid.dart';
 import 'package:pathfinder/visualiser.dart';
 import 'pathfinder.dart';
 import 'dart:developer';
@@ -28,11 +29,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-
   @override
+  List<List<bool>> maze;
   void initState() {
-    var boolMaze = [
+    maze = [
       //y0
       [true, true, true, true, true], //x5
       //y1
@@ -45,8 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
       [true, true, true, true, true],
     ];
 
-    visualise(boolMaze);
-    log('result: ' + pathfinder(boolMaze).toString());
+    //log('result: ' + pathfinder(maze, [1, 0], [2, 3]).toString());
 
     super.initState();
   }
@@ -57,8 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        body: Column(
-          children: <Widget>[],
-        ));
+        body: SafeArea(child: NodeGrid(maze: maze, startpointP: [1,0], endpointQ: [2,4],)),
+    );
   }
 }
