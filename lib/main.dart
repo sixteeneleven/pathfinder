@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:pathfinder/models/maze_model.dart';
 import 'package:pathfinder/ui/node_grid.dart';
+import 'mysql.dart';
 
 void main() => runApp(RootOfMyApp());
 
@@ -27,25 +31,13 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   @override
-  List<List<bool>> maze;
+  Future<MazeData> futureMaze;
 
   void initState() {
-    maze = [
-      //y0
-      [true, true, true, true, true], //x5
-      //y1
-      [true, false, false, false, true],
-      //y2
-      [true, true, true, true, true],
-      //y3
-      [true, true, true, true, true],
-      //y4
-      [true, true, true, true, true],
-    ];
-
     //log('result: ' + pathfinder(maze, [1, 0], [2, 3]).toString());
 
     super.initState();
+    futureMaze = loadMazeDataFromDB('0');
   }
 
   @override
@@ -55,11 +47,36 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: SafeArea(
-          child: NodeGrid(
-        maze: maze,
-        startpointP: [1, 0],
-        endpointQ: [2, 4],
-      )),
+        child: Center(
+          child: Column(
+            children: <Widget>[
+              FutureBuilder(
+                future: futureMaze,
+                builder:
+                    (BuildContext context, AsyncSnapshot<MazeData> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.none) {
+                    return Text("Waiting for Pathfinder to complete");
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return snapshot.hasData
+                      ? NodeGrid(
+                      data: snapshot.data,)
+                  //return loading spinner if no events yet
+                      : new Text("Failed to load Maze data");
+                  },
+              ),
+            ],
+          ),
+        ),
+        /*
+       
+         */
+      ),
     );
   }
 }

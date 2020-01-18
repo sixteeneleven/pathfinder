@@ -35,20 +35,90 @@ void main() {
     expect(pathfinder(sixMaze, [1, 0], [2, 3]), 6);
   });
 
-  test('twelve steps', () {
+  test('large size', () {
     final twelveMaze = [
       //y0
-      [true, true, true, true, true], //x5
+      [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+      ], //x5
       //y1
-      [true, false, false, false, false],
+      [
+        true,
+        false,
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+      ],
       //y2
-      [true, false, false, false, false],
+      [
+        true,
+        false,
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+      ],
       //y3
-      [true, false, false, false, false],
+      [
+        true,
+        false,
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+      ],
       //y4
-      [true, true, true, true, true],
+      [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+      ],
     ];
-    expect(pathfinder(twelveMaze, [4, 4], [4, 0]), 12);
+    expect(pathfinder(twelveMaze, [4, 4], [10, 10]), 12);
   });
 
   test('branching path', () {

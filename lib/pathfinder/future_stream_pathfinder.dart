@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:pathfinder/models/maze_model.dart';
+
 import 'adjacent_nodes.dart';
 import 'visualiser.dart';
 import '../ui/node_button.dart';
@@ -9,12 +11,9 @@ import '../ui/node_button.dart';
 //async method in the build function, and return int once future completes.
 // adds new events to stream as they occur
 Future<int> pathfinder(
+    MazeData data,
     //bool version of maze used for valid adjacent cell calculation
-    List<List<bool>> maze,
-    //start point p used for navigation
-    List<int> startpointP,
-    //endpoint q used for navigation
-    List<int> endpointQ,
+
     //streams to push state updates to
     StreamController<String> stringStream,
     StreamController<List<List<NodeButton>>> nodeStream,
@@ -29,7 +28,7 @@ Future<int> pathfinder(
   List<List<int>> queue = [];
 
   //initalise queue with startpoint to begin outwards search
-  queue.add([startpointP[0], startpointP[1], 0]);
+  queue.add([data.startpointP[0], data.startpointP[1], 0]);
 
   //current state of the maze
   List<List<NodeButton>> currentNodesModel = allNodesModel ;
@@ -51,15 +50,15 @@ Future<int> pathfinder(
     });
 
     //if the current queue node matches the objective endpoint node
-    if (queue[qIndex][0] == endpointQ[0] &&
-        queue[qIndex][1] == endpointQ[1]) {
+    if (queue[qIndex][0] == data.endpointQ[0] &&
+        queue[qIndex][1] == data.endpointQ[1]) {
       //print console notification
       print(queue[qIndex].toString() +
           ' matches objective ' +
-          endpointQ.toString());
+          data.endpointQ.toString());
       //add event + status to stream with delay
       stringStream.add("Shortest amount of steps to " +
-         endpointQ.toString() +
+         data.endpointQ.toString() +
           ": " +
           queue[qIndex][2].toString());
 
@@ -79,7 +78,7 @@ Future<int> pathfinder(
 
     //generate valid adjacent nodes to step to from current queue node
     List<List<int>> validSteps =
-    generateAdjacentCells(queue[qIndex], maze);
+    generateAdjacentCells(queue[qIndex], data.maze);
 
     //init removal list
     List<List<int>> toRemove = [];
@@ -124,7 +123,7 @@ Future<int> pathfinder(
       nodeStream.add(currentNodesModel);
     });
     //console output visual representation
-    postvisualise(queue, maze);
+    visualiseWithQueue(queue, data.maze);
   }
   //if not found
   nodeStream.close();

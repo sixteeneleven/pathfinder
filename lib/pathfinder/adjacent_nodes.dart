@@ -1,4 +1,4 @@
-//given a 2d map of bool nodes and a single stepped node to check,
+//given a 2d map of bool nodes and a single node to check,
 //returns a list of adjacent nodes that are valid for traversal
 List<List<int>> generateAdjacentCells(List<int> node, List<List<bool>> maze) {
   print('');

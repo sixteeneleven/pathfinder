@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+//returns individual tile widget representing a node in the maze
+//node req
 class NodeButton extends StatefulWidget {
   NodeButton(
       {Key key,
@@ -20,6 +22,7 @@ class NodeButton extends StatefulWidget {
 class _NodeButtonState extends State<NodeButton> {
   @override
   Widget build(BuildContext context) {
+    //expands to maximum size permitted
     return Expanded(
       flex: 1,
         child: Padding(
@@ -48,6 +51,7 @@ class _NodeButtonState extends State<NodeButton> {
     );
   }
 
+  //returns appropriate tile colour based on current state of node
   Color nodeColour() {
     if (widget.wall) {
       return Colors.red;

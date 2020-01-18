@@ -21,7 +21,7 @@ visualise(List<List<bool>> maze) {
   }
 }
 
-postvisualise(List<List<int>> queue, List<List<bool>> maze) {
+visualiseWithQueue(List<List<int>> queue, List<List<bool>> maze) {
   print('');
   //for each row depth level  (y0-y^n)
   for (int y = 0; y < maze.length; y++) {

@@ -1,20 +1,27 @@
 import 'adjacent_nodes.dart';
 import 'visualiser.dart';
 
+//pathfinder algorithm which finds the shortest amount of steps required to meet
+//endpoint q, returns result <int> equal to number of steps required to reach the target
 int pathfinder(
-    List<List<bool>> maze, List<int> startpointP, List<int> endpointQ) {
-  visualise(maze);
+    //bool version of maze used for valid adjacent cell calculation
+    List<List<bool>> maze,
+    //start point p used for navigation
+    List<int> startpointP,
+    //endpoint q used for navigation
+    List<int> endpointQ) {
+
+  //visualise bool map in text-based grid
+  //
   // [true, true, true]
   // [true, false, true]
   // [true, true, true]
   //
   // false at x1,y1 or at maze[depth 1][node 1]
-  int result = (solve(maze, startpointP, endpointQ));
+  visualise(maze);
 
-  return result;
-}
 
-int solve(List<List<bool>> maze, List<int> startpointP, List<int> endpointQ) {
+
   //empty queue of co-ords and their weighting
   List<List<int>> queue = [];
 
@@ -26,7 +33,7 @@ int solve(List<List<bool>> maze, List<int> startpointP, List<int> endpointQ) {
       print(queue[qIndex].toString() +
           ' matches objective ' +
           endpointQ.toString());
-      postvisualise(queue, maze);
+      visualiseWithQueue(queue, maze);
       return queue[qIndex][2];
     }
 
@@ -48,9 +55,13 @@ int solve(List<List<bool>> maze, List<int> startpointP, List<int> endpointQ) {
       }
       validSteps.removeWhere((node) => toRemove.contains(node));
       queue.addAll(validSteps);
-      postvisualise(queue, maze);
+      visualiseWithQueue(queue, maze);
     } else {
       print("steps empty");
     }
   }
+
+  return null;
 }
+
+int solve(List<List<bool>> maze, List<int> startpointP, List<int> endpointQ) {}
