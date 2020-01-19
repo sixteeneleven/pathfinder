@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'node_button.dart';
+import '../models/node_button.dart';
 
 NodeMapGrid(List<List<NodeButton>> map) {
   List<Row> rowsToBuildWith = [];

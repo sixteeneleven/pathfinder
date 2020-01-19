@@ -2,21 +2,19 @@ import 'dart:async';
 import 'package:pathfinder/models/maze_model.dart';
 import 'grid_builder.dart';
 import 'package:flutter/material.dart';
-import 'package:pathfinder/ui/node_button.dart';
+import 'package:pathfinder/models/node_button.dart';
 import '../pathfinder/future_stream_pathfinder.dart';
-import 'package:pathfinder/mysql.dart';
+import 'package:pathfinder/db/mysql.dart';
 
 //widget that produces a visual representation of maze to solve, and shows how
 //the sorting algorithm processes the maze. includes a RaisedButton to start the
 // pathfinder and a status string which changes to reflect the current state
 // of the algorithm
 class NodeGrid extends StatefulWidget {
-  const NodeGrid(
-      {Key key,
-      @required this.data})
-      : super(key: key);
+  NodeGrid({Key key, @required this.data, this.newd}) : super(key: key);
 
-  final MazeData data;
+  MazeData data;
+  bool newd;
 
   _NodeGridState createState() => _NodeGridState();
 }
@@ -24,6 +22,9 @@ class NodeGrid extends StatefulWidget {
 class _NodeGridState extends State<NodeGrid> {
   //current state of the maze
   List<List<NodeButton>> _allNodesModel = [];
+
+  //whether or not pathfinder has completed for disabling button
+  bool _completed;
 
   Future<int> _result;
 
@@ -35,36 +36,16 @@ class _NodeGridState extends State<NodeGrid> {
 
   @override
   void initState() {
+    _completed = false;
     //initialise the status string with the startpoint and endpoint that is trying to be reached
     _stringStream.add("P " +
         widget.data.startpointP.toString() +
         " -> Q " +
         widget.data.endpointQ.toString());
-
-    //for each tier of boolean maze
-    for (int y = 0; y < widget.data.maze.length; y++) {
-      List<NodeButton> rowModel = [];
-      //go through each node of that tier
-      for (int x = 0; x < widget.data.maze[y].length; x++) {
-        //if it is a wall add generic wall node
-        if (!widget.data.maze[y][x]) {
-          rowModel.add(NodeButton(
-            node: [x, y, 0],
-            wall: true,
-          ));
-        } else {
-          //else add generic non-wall node
-          rowModel.add(NodeButton(
-            node: [x, y, 0],
-            wall: false,
-          ));
-        }
-      }
-      //add the completed row to model of all nodes
-      _allNodesModel.add(rowModel);
-    }
+    _allNodesModel = boolMazeToNodes();
     //add new event update to stream of current node state
     _nodeStream.add(_allNodesModel);
+
     super.initState();
   }
 
@@ -74,8 +55,7 @@ class _NodeGridState extends State<NodeGrid> {
     print("rebuild");
 
     return Center(
-      child: ListView(
-        shrinkWrap: true,
+      child: Column(
         children: <Widget>[
           //if there is a stream event, rebuild produce a NodeMapGrid with latest event
           //using nodestream for data
@@ -91,19 +71,23 @@ class _NodeGridState extends State<NodeGrid> {
             },
           ),
           //button which starts pathfinder function on press
-          RaisedButton(
-            child: Text("Pathfinder"),
-            onPressed: () async {
-              print("press");
-              setState(() {
-                _result = pathfinder(
-                    widget.data,
-                    _stringStream,
-                    _nodeStream,
-                    _allNodesModel);
-              });
-            },
-          ),
+          !_completed
+              ? RaisedButton(
+                  child: Text("Pathfinder"),
+                  onPressed: () async {
+                    print("press");
+                    setState(() {
+                      _result = pathfinder(widget.data, _stringStream,
+                          _nodeStream, _allNodesModel);
+                      _completed = true;
+                    });
+                  },
+                )
+              : RaisedButton(
+                  child: Text("Pathfinder"),
+                  onPressed: null,
+                ),
+
           //if there is a stream event, rebuild produce a large Text widget with latest event
           //using string status stream for data
           Align(
@@ -152,13 +136,49 @@ class _NodeGridState extends State<NodeGrid> {
             ),
           ),
           RaisedButton(
+            child: Text("load maze from list"),
             onPressed: () {
-              saveMazeDataToDB(widget.data);
+              setState(() {
+                _completed = false;
+              });
+              _stringStream.add("P " +
+                  widget.data.startpointP.toString() +
+                  " -> Q " +
+                  widget.data.endpointQ.toString());
+              _allNodesModel = boolMazeToNodes();
+              _nodeStream.add(_allNodesModel);
             },
-            child: Text("save"),
           ),
         ],
       ),
     );
+  }
+
+  List<List<NodeButton>> boolMazeToNodes() {
+    print("oop");
+    List<List<NodeButton>> model = [];
+    //for each tier of boolean maze
+    for (int y = 0; y < widget.data.maze.length; y++) {
+      List<NodeButton> rowModel = [];
+      //go through each node of that tier
+      for (int x = 0; x < widget.data.maze[y].length; x++) {
+        //if it is a wall add generic wall node
+        if (!widget.data.maze[y][x]) {
+          rowModel.add(NodeButton(
+            node: [x, y, 0],
+            wall: true,
+          ));
+        } else {
+          //else add generic non-wall node
+          rowModel.add(NodeButton(
+            node: [x, y, 0],
+            wall: false,
+          ));
+        }
+      }
+      //add the completed row to model of all nodes
+      model.add(rowModel);
+    }
+    return model;
   }
 }

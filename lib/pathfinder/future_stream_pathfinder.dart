@@ -3,7 +3,7 @@ import 'package:pathfinder/models/maze_model.dart';
 
 import 'adjacent_nodes.dart';
 import 'visualiser.dart';
-import '../ui/node_button.dart';
+import '../models/node_button.dart';
 
 
 //pathfinder algorithm which finds the shortest amount of steps required to meet
@@ -64,8 +64,9 @@ Future<int> pathfinder(
 
 
       //close the streams + exit loop
-      stringStream.close();
-      nodeStream.close();
+      //
+      //stringStream.close();
+      //nodeStream.close();
       //set result variable
       return(queue[qIndex][2]);
 

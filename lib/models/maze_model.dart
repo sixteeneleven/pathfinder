@@ -1,3 +1,6 @@
+
+//class which holds structure for data to be used to supply grid and
+//pathfinder functions, with id for mysql storage
 class MazeData {
   String id;
   List<int> startpointP;
@@ -6,10 +9,10 @@ class MazeData {
 
   MazeData(this.id, this.startpointP, this.endpointQ, this.maze);
 
-  MazeData.fromJSON(String id, Map<String, dynamic> data) {
+  MazeData.fromJSON(String idx, Map<String, dynamic> data) {
 
     //builds new list<int> by iterating through list<dynamic>
-    id = id;
+    id = idx;
     startpointP = List.from(data['startpointp']);
     endpointQ = List.from(data['endpointq']);
     maze = _parseMaze(data['boolmaze']);

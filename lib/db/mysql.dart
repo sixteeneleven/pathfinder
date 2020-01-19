@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:mysql1/mysql1.dart';
 import 'dart:developer';
-
 import 'package:pathfinder/models/maze_model.dart';
 
 var _dbSettings = new ConnectionSettings(
@@ -33,7 +32,7 @@ Future<MazeData> loadMazeDataFromDB(String id) async {
   //create connection to db
   final conn = await MySqlConnection.connect(_dbSettings);
 //query string
-  final response = await conn.query("select data from maze where 'id' =  $id");
+  final response = await conn.query("select data from maze where id =  '$id' ");
 //close connection to db
   await conn.close();
   //return decoded response
@@ -43,9 +42,33 @@ Future<MazeData> loadMazeDataFromDB(String id) async {
   }
 
   List<MazeData> dlist = [];
+
   for (var row in response) {
     dlist.add(MazeData.fromJSON(id, jsonDecode(row[0])));
   }
-
   return dlist[0];
+}
+
+Future<List<MazeData>> loadMazeDataListFromDB() async {
+  log('querying mysql db');
+  //create connection to db
+  final conn = await MySqlConnection.connect(_dbSettings);
+//query string
+  final response = await conn.query("select * from maze");
+//close connection to db
+  await conn.close();
+  //return decoded response
+  if (response == null) {
+    print("no response");
+    return([MazeData('0', [0,0], [0,0], [[false, false],[false,false]])]);
+  }
+
+  List<MazeData> dlist = [];
+
+  for (var row in response) {
+    dlist.add(MazeData.fromJSON(row[0], jsonDecode(row[1])));
+
+  }
+
+  return dlist;
 }
